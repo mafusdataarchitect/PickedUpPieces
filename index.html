@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Picked Up Pieces – Modern Cover Band, Sandpoint ID</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0d0d0d;
+      --card:    #161616;
+      --border:  #2a2a2a;
+      --accent:  #f59e0b;
+      --accent2: #d97706;
+      --text:    #e5e7eb;
+      --muted:   #6b7280;
+      --light:   #9ca3af;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      background: rgba(13,13,13,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-size: 1rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--accent); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase; color: var(--light); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* hamburger (mobile) */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--light); border-radius: 2px; transition: 0.3s; }
+    #nav-toggle { display: none; }
+
+    @media (max-width: 680px) {
+      .hamburger { display: flex; }
+      .nav-links {
+        display: none; flex-direction: column; gap: 0;
+        position: absolute; top: 60px; left: 0; right: 0;
+        background: #111; border-bottom: 1px solid var(--border);
+        padding: 1rem 2rem;
+      }
+      .nav-links a { padding: 0.6rem 0; display: block; }
+      #nav-toggle:checked ~ .nav-links { display: flex; }
+      #nav-toggle:checked ~ .hamburger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      #nav-toggle:checked ~ .hamburger span:nth-child(2) { opacity: 0; }
+      #nav-toggle:checked ~ .hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(245,158,11,0.08) 0%, transparent 70%),
+        var(--bg);
+    }
+    .hero-eyebrow {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 1.2rem;
+    }
+    #hero h1 {
+      font-size: clamp(3rem, 9vw, 7rem);
+      font-weight: 800; letter-spacing: -0.02em; line-height: 1;
+      color: #fff; margin-bottom: 1rem;
+    }
+    #hero h1 span { color: var(--accent); }
+    .hero-sub {
+      font-size: 1.1rem; color: var(--light); margin-bottom: 2.5rem; max-width: 480px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      background: var(--accent); color: #000;
+      font-weight: 700; font-size: 0.85rem; letter-spacing: 0.06em;
+      text-transform: uppercase; text-decoration: none; border-radius: 6px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--accent2); transform: translateY(-1px); }
+
+    /* ── Sections ── */
+    section { padding: 5rem 2rem; max-width: 900px; margin: 0 auto; }
+    section + section { border-top: 1px solid var(--border); }
+
+    .section-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem;
+    }
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800; letter-spacing: -0.01em; color: #fff;
+      margin-bottom: 1.4rem;
+    }
+    p { color: var(--light); margin-bottom: 1rem; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── Genre grid ── */
+    .genre-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem; margin-top: 2rem;
+    }
+    .genre-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 1.2rem 1rem; text-align: center;
+    }
+    .genre-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .genre-name { font-size: 0.82rem; font-weight: 700; color: var(--text); }
+    .genre-desc { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+
+    /* ── Artists tag cloud ── */
+    .artists {
+      display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem;
+    }
+    .artist-tag {
+      background: var(--card); border: 1px solid var(--border); border-radius: 999px;
+      padding: 0.3rem 0.9rem; font-size: 0.8rem; color: var(--light);
+    }
+
+    /* ── Performance details ── */
+    .perf-list {
+      list-style: none; margin-top: 1.5rem;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.8rem;
+    }
+    .perf-list li {
+      display: flex; align-items: flex-start; gap: 0.7rem;
+      background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.9rem 1rem; font-size: 0.85rem; color: var(--light);
+    }
+    .perf-list li::before { content: "♩"; color: var(--accent); font-size: 1rem; flex-shrink: 0; }
+
+    /* ── Setlist ── */
+    .setlist {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.6rem; margin-top: 1.5rem;
+    }
+    .setlist-item {
+      display: flex; align-items: center; gap: 0.8rem;
+      background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.75rem 1rem;
+    }
+    .setlist-num { font-size: 0.7rem; color: var(--accent); font-weight: 700; min-width: 20px; }
+    .setlist-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+    .setlist-artist { font-size: 0.75rem; color: var(--muted); }
+
+    /* ── Set tabs ── */
+    .set-tabs {
+      display: flex; gap: 0.5rem; margin: 1.5rem 0 1rem; flex-wrap: wrap;
+    }
+    .set-tab {
+      padding: 0.45rem 1.2rem; border-radius: 999px; font-size: 0.8rem;
+      font-weight: 700; letter-spacing: 0.05em; cursor: pointer;
+      border: 1px solid var(--border); background: transparent; color: var(--muted);
+      transition: all 0.15s;
+    }
+    .set-tab:hover { border-color: var(--accent); color: var(--accent); }
+    .set-tab.active { background: var(--accent); border-color: var(--accent); color: #000; }
+
+    /* ── Videos ── */
+    .video-placeholder {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 4rem 2rem; text-align: center; margin-top: 1.5rem;
+      color: var(--muted); font-size: 0.9rem;
+    }
+    .video-placeholder .play-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+
+    /* ── Photos ── */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem; margin-top: 1.5rem;
+    }
+    .photo-slot {
+      aspect-ratio: 4/3; border-radius: 10px; overflow: hidden;
+      background: var(--card); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 0.8rem;
+    }
+    .photo-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* ── Venues ── */
+    .venue-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.8rem; margin-top: 1.5rem;
+    }
+    .venue-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+      padding: 1rem; font-size: 0.82rem; color: var(--light);
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .venue-card::before { content: "📍"; font-size: 1rem; }
+
+    /* ── Booking CTA ── */
+    .booking-box {
+      background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.04));
+      border: 1px solid rgba(245,158,11,0.3); border-radius: 14px;
+      padding: 2.5rem; margin-top: 2rem; text-align: center;
+    }
+    .booking-box h3 { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
+    .booking-box p { color: var(--light); margin-bottom: 1.5rem; }
+    .contact-info { font-size: 1rem; color: var(--text); margin-top: 1rem; }
+    .contact-info strong { color: var(--accent); }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center; padding: 2rem; font-size: 0.8rem; color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <a class="nav-logo" href="#hero">Picked Up Pieces</a>
+    <input type="checkbox" id="nav-toggle">
+    <label class="hamburger" for="nav-toggle">
+      <span></span><span></span><span></span>
+    </label>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#sound">Sound</a></li>
+      <li><a href="#performance">Live</a></li>
+      <li><a href="#setlist">Set List</a></li>
+      <li><a href="#videos">Videos</a></li>
+      <li><a href="#photos">Photos</a></li>
+      <li><a href="#booking">Booking</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-eyebrow">Sandpoint, Idaho</div>
+    <h1>Picked Up<br><span>Pieces</span></h1>
+    <p class="hero-sub">Modern cover band bringing the best of the last 30 years — live, loud, and right in front of you.</p>
+    <a class="btn" href="#booking">Book Us</a>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="section-label">About the Band</div>
+    <h2>High Energy. Great Songs. Built for the Crowd.</h2>
+    <p>Picked Up Pieces is a modern, high-energy cover band based in Sandpoint, Idaho, performing the best popular music from the past 30 years. Our sound blends 90s alternative, 2000s pop and indie, 2010s chart-toppers, and today's most influential artists.</p>
+    <p>We focus on recognizable, crowd-pleasing songs performed with tight rhythms, dynamic arrangements, and a polished stage presence. Whether it's a relaxed afternoon at a lakeside venue in Hope or a packed evening at a Sandpoint winery, we deliver a show that feels fresh, contemporary, and genuinely fun.</p>
+    <p>We're proud to be part of the North Idaho music scene — playing benefits, local events, and the venues that make this region special.</p>
+  </section>
+
+  <!-- Sound -->
+  <section id="sound">
+    <div class="section-label">Our Sound</div>
+    <h2>Something for Everyone</h2>
+    <p>We cover a wide range of modern genres to connect with any crowd — from mellow wine-sipping evenings to full-on dance floors.</p>
+
+    <div class="genre-grid">
+      <div class="genre-card">
+        <div class="genre-icon">🎵</div>
+        <div class="genre-name">Pop & Alt-Pop</div>
+        <div class="genre-desc">Chart hits done right</div>
+      </div>
+      <div class="genre-card">
+        <div class="genre-icon">🎸</div>
+        <div class="genre-name">Rock & Alternative</div>
+        <div class="genre-desc">From grunge to indie</div>
+      </div>
+      <div class="genre-card">
+        <div class="genre-icon">🤠</div>
+        <div class="genre-name">Country & Americana</div>
+        <div class="genre-desc">Roots with a modern edge</div>
+      </div>
+      <div class="genre-card">
+        <div class="genre-icon">🎶</div>
+        <div class="genre-name">Indie & Singer-Songwriter</div>
+        <div class="genre-desc">Intimate and melodic</div>
+      </div>
+      <div class="genre-card">
+        <div class="genre-icon">🎤</div>
+        <div class="genre-name">Soul & R&B</div>
+        <div class="genre-desc">Groove-driven and smooth</div>
+      </div>
+    </div>
+
+    <div class="artists">
+      <span class="artist-tag">Coldplay</span>
+      <span class="artist-tag">Foo Fighters</span>
+      <span class="artist-tag">Adele</span>
+      <span class="artist-tag">Chris Stapleton</span>
+      <span class="artist-tag">Billie Eilish</span>
+      <span class="artist-tag">The Weeknd</span>
+      <span class="artist-tag">Radiohead</span>
+      <span class="artist-tag">Jason Mraz</span>
+      <span class="artist-tag">Benson Boone</span>
+      <span class="artist-tag">Gnarls Barkley</span>
+      <span class="artist-tag">The Cranberries</span>
+      <span class="artist-tag">Semisonic</span>
+      <span class="artist-tag">Metallica</span>
+      <span class="artist-tag">Tones & I</span>
+      <span class="artist-tag">& more</span>
+    </div>
+  </section>
+
+  <!-- Performance -->
+  <section id="performance">
+    <div class="section-label">Live Performance</div>
+    <h2>A Show Built Around the Moment</h2>
+    <p>Picked Up Pieces typically performs three sets plus an encore — 2.5 to 3 hours of live music. We tailor every performance to the venue, reading the room and adjusting energy accordingly.</p>
+
+    <ul class="perf-list">
+      <li>Clean, coordinated song intros and transitions</li>
+      <li>Dynamic control — from brushed ballads to full-band anthems</li>
+      <li>Electronic textures and percussion variety</li>
+      <li>Smooth energy arcs — mellow, groove-driven, and high-impact</li>
+      <li>Polished stage presence and crowd engagement</li>
+    </ul>
+  </section>
+
+  <!-- Setlist -->
+  <section id="setlist">
+    <div class="section-label">Set List</div>
+    <h2>What We Play</h2>
+    <p>Three full sets plus an encore — around 2.5–3 hours of live music covering four decades of crowd favorites.</p>
+
+    <div class="set-tabs">
+      <button class="set-tab active" onclick="showSet('set1', this)">Set 1</button>
+      <button class="set-tab" onclick="showSet('set2', this)">Set 2</button>
+      <button class="set-tab" onclick="showSet('set3', this)">Set 3</button>
+      <button class="set-tab" onclick="showSet('encore', this)">Encore</button>
+    </div>
+
+    <div id="set1" class="set-panel active setlist">
+      <div class="setlist-item"><div class="setlist-num">01</div><div><div class="setlist-title">Hand in My Pocket</div><div class="setlist-artist">Alanis Morissette</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">02</div><div><div class="setlist-title">Dreams</div><div class="setlist-artist">The Cranberries</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">03</div><div><div class="setlist-title">Thinking Out Loud</div><div class="setlist-artist">Ed Sheeran</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">04</div><div><div class="setlist-title">Every Breath You Take</div><div class="setlist-artist">The Police</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">05</div><div><div class="setlist-title">Pocket Full of Sunshine</div><div class="setlist-artist">Natasha Bedingfield</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">06</div><div><div class="setlist-title">Tennessee Whiskey</div><div class="setlist-artist">Chris Stapleton</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">07</div><div><div class="setlist-title">Clocks</div><div class="setlist-artist">Coldplay</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">08</div><div><div class="setlist-title">Austin</div><div class="setlist-artist">Blake Shelton</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">09</div><div><div class="setlist-title">Since You've Been Gone</div><div class="setlist-artist">Kelly Clarkson</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">10</div><div><div class="setlist-title">Blinding Lights</div><div class="setlist-artist">The Weeknd</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">11</div><div><div class="setlist-title">Rolling in the Deep</div><div class="setlist-artist">Adele</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">12</div><div><div class="setlist-title">With or Without You</div><div class="setlist-artist">U2</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">13</div><div><div class="setlist-title">Never Tear Us Apart</div><div class="setlist-artist">INXS</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">14</div><div><div class="setlist-title">Everlong</div><div class="setlist-artist">Foo Fighters</div></div></div>
+    </div>
+
+    <div id="set2" class="set-panel setlist" style="display:none">
+      <div class="setlist-item"><div class="setlist-num">01</div><div><div class="setlist-title">Hallelujah</div><div class="setlist-artist">Leonard Cohen</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">02</div><div><div class="setlist-title">Parachute</div><div class="setlist-artist">Chris Stapleton</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">03</div><div><div class="setlist-title">Crazy</div><div class="setlist-artist">Gnarls Barkley</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">04</div><div><div class="setlist-title">Human</div><div class="setlist-artist">Rag'n'Bone Man</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">05</div><div><div class="setlist-title">Black Velvet</div><div class="setlist-artist">Alannah Myles</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">06</div><div><div class="setlist-title">Big Black Horse and a Cherry Tree</div><div class="setlist-artist">KT Tunstall</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">07</div><div><div class="setlist-title">Wicked Game</div><div class="setlist-artist">Chris Isaak</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">08</div><div><div class="setlist-title">Birds of a Feather</div><div class="setlist-artist">Billie Eilish</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">09</div><div><div class="setlist-title">Everybody Wants to Rule the World</div><div class="setlist-artist">Tears for Fears</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">10</div><div><div class="setlist-title">Dance Monkey</div><div class="setlist-artist">Tones & I</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">11</div><div><div class="setlist-title">Just a Girl</div><div class="setlist-artist">No Doubt</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">12</div><div><div class="setlist-title">Creep</div><div class="setlist-artist">Radiohead</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">13</div><div><div class="setlist-title">The Middle</div><div class="setlist-artist">Jimmy Eat World</div></div></div>
+    </div>
+
+    <div id="set3" class="set-panel setlist" style="display:none">
+      <div class="setlist-item"><div class="setlist-num">01</div><div><div class="setlist-title">I'm Yours</div><div class="setlist-artist">Jason Mraz</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">02</div><div><div class="setlist-title">Kiss Me</div><div class="setlist-artist">Sixpence None the Richer</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">03</div><div><div class="setlist-title">I've Got No Roots</div><div class="setlist-artist">Alice Merton</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">04</div><div><div class="setlist-title">Can't Ya See</div><div class="setlist-artist">The Marshall Tucker Band</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">05</div><div><div class="setlist-title">Broken Halos</div><div class="setlist-artist">Chris Stapleton</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">06</div><div><div class="setlist-title">Yellow</div><div class="setlist-artist">Coldplay</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">07</div><div><div class="setlist-title">Nothing Else Matters</div><div class="setlist-artist">Metallica</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">08</div><div><div class="setlist-title">Beautiful Things</div><div class="setlist-artist">Benson Boone</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">09</div><div><div class="setlist-title">Not at This Party</div><div class="setlist-artist">Dasha</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">10</div><div><div class="setlist-title">My Hero</div><div class="setlist-artist">Foo Fighters</div></div></div>
+      <div class="setlist-item"><div class="setlist-num">11</div><div><div class="setlist-title">Closing Time</div><div class="setlist-artist">Semisonic</div></div></div>
+    </div>
+
+    <div id="encore" class="set-panel setlist" style="display:none">
+      <div class="setlist-item"><div class="setlist-num">★</div><div><div class="setlist-title">Whiskey in the Jar</div><div class="setlist-artist">Metallica</div></div></div>
+    </div>
+  </section>
+
+  <!-- Videos -->
+  <section id="videos">
+    <div class="section-label">Video Clips</div>
+    <h2>See Us Live</h2>
+    <p>Live performance videos coming soon. Check back here for clips from upcoming shows.</p>
+    <div class="video-placeholder">
+      <div class="play-icon">▶</div>
+      <p>Videos will appear here — YouTube links welcome.</p>
+    </div>
+  </section>
+
+  <!-- Photos -->
+  <section id="photos">
+    <div class="section-label">Photos</div>
+    <h2>On Stage</h2>
+    <div class="photo-grid" id="photo-grid">
+      <div class="photo-slot"><img src="photos/3pieces.png" alt="Picked Up Pieces"></div>
+      <div class="photo-slot"><img src="photos/Copilot_20261001_205730.png" alt="Picked Up Pieces"></div>
+      <div class="photo-slot"><img src="photos/IMG_4163.JPEG" alt="Live performance"></div>
+      <div class="photo-slot"><img src="photos/IMG_4168.JPEG" alt="Live performance"></div>
+      <div class="photo-slot"><img src="photos/IMG_4183.JPEG" alt="Live performance"></div>
+      <div class="photo-slot"><img src="photos/IMG_4210.JPEG" alt="Live performance"></div>
+    </div>
+  </section>
+
+  <!-- Booking -->
+  <section id="booking">
+    <div class="section-label">Booking</div>
+    <h2>Book Picked Up Pieces</h2>
+    <p>We're available for a wide range of venues and events across the greater North Idaho region.</p>
+
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.5rem;">Past &amp; recurring venues:</p>
+    <div class="venue-grid">
+      <div class="venue-card">Pend d'Oreille Winery — Sandpoint</div>
+      <div class="venue-card">Pearl's on the Lake — Hope</div>
+      <div class="venue-card">MickDuff's — Sandpoint</div>
+      <div class="venue-card">Barrel 33 — Sandpoint</div>
+      <div class="venue-card">Pour Authority — Sandpoint</div>
+      <div class="venue-card">Private &amp; Community Events</div>
+    </div>
+
+    <div class="booking-box">
+      <h3>Ready to Book?</h3>
+      <p>Reach out and we'll get back to you quickly with availability and details.</p>
+      <div class="contact-info">
+        <strong>Frank</strong> — Picked Up Pieces<br>
+        <a href="mailto:frank_m_roberts@hotmail.com" style="color:var(--accent);text-decoration:none;">frank_m_roberts@hotmail.com</a>
+      </div>
+      <div style="margin-top:1.2rem;">
+        <a href="https://www.facebook.com/picked.up.pieces" target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;gap:0.5rem;color:var(--light);font-size:0.85rem;text-decoration:none;border:1px solid var(--border);border-radius:6px;padding:0.5rem 1rem;transition:border-color 0.2s,color 0.2s;"
+           onmouseover="this.style.borderColor='#1877f2';this.style.color='#1877f2'"
+           onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--light)'">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.887v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+          </svg>
+          Follow us on Facebook
+        </a>
+      </div>
+      <br>
+      <p style="font-size:0.8rem;color:var(--muted);">📍 Sandpoint, Idaho &nbsp;·&nbsp; Serving greater North Idaho</p>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2026 Picked Up Pieces &nbsp;·&nbsp; Sandpoint, Idaho
+    &nbsp;·&nbsp;
+    <a href="https://www.facebook.com/picked.up.pieces" target="_blank" rel="noopener"
+       style="color:var(--muted);text-decoration:none;">Facebook</a>
+  </footer>
+
+  <script>
+    function showSet(id, btn) {
+      document.querySelectorAll('.set-panel').forEach(p => p.style.display = 'none');
+      document.querySelectorAll('.set-tab').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).style.display = 'grid';
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+</html>
